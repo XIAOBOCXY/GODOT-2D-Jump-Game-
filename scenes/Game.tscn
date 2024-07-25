@@ -1,8 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://w5jnglu7lc1c"]
+[gd_scene load_steps=18 format=3 uid="uid://w5jnglu7lc1c"]
 
 [ext_resource type="Texture2D" uid="uid://d0q2g65ahgok" path="res://assets/sprites/world_tileset.png" id="1_jgssp"]
 [ext_resource type="PackedScene" uid="uid://3nqq24jyeh0x" path="res://scenes/Player.tscn" id="1_s5p8j"]
 [ext_resource type="PackedScene" uid="uid://brqwtoyy6ch0w" path="res://scenes/PlatForm.tscn" id="3_43645"]
+[ext_resource type="PackedScene" uid="uid://20hqtd875nv5" path="res://scenes/Coin.tscn" id="4_ieqev"]
+[ext_resource type="PackedScene" uid="uid://b21ajycyow0xm" path="res://scenes/KillZone.tscn" id="5_eltco"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_k351x"]
 texture = ExtResource("1_jgssp")
@@ -400,21 +402,7 @@ texture = ExtResource("1_jgssp")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_k351x")
 
-[sub_resource type="Animation" id="Animation_mk6la"]
-resource_name = "move"
-loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(514, -11), Vector2(623, -11)]
-}
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ea8qq"]
 
 [sub_resource type="Animation" id="Animation_tqch6"]
 length = 0.001
@@ -431,10 +419,41 @@ tracks/0/keys = {
 "values": [Vector2(514, -11)]
 }
 
+[sub_resource type="Animation" id="Animation_mk6la"]
+resource_name = "move"
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(514, -11), Vector2(623, -11)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4ox5b"]
 _data = {
 "RESET": SubResource("Animation_tqch6"),
 "move": SubResource("Animation_mk6la")
+}
+
+[sub_resource type="Animation" id="Animation_yix3w"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(865, -11)]
 }
 
 [sub_resource type="Animation" id="Animation_o8u5d"]
@@ -454,7 +473,13 @@ tracks/0/keys = {
 "values": [Vector2(865, -11), Vector2(1023, -11)]
 }
 
-[sub_resource type="Animation" id="Animation_yix3w"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_trngg"]
+_data = {
+"RESET": SubResource("Animation_yix3w"),
+"move": SubResource("Animation_o8u5d")
+}
+
+[sub_resource type="Animation" id="Animation_istm4"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -466,13 +491,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(865, -11)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_trngg"]
-_data = {
-"RESET": SubResource("Animation_yix3w"),
-"move": SubResource("Animation_o8u5d")
+"values": [Vector2(-3.5036, -32)]
 }
 
 [sub_resource type="Animation" id="Animation_rxyxq"]
@@ -489,21 +508,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(-3.5036, -32), Vector2(83, -32)]
-}
-
-[sub_resource type="Animation" id="Animation_istm4"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-3.5036, -32)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_j6x22"]
@@ -526,30 +530,72 @@ position = Vector2(-138, 0)
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(28.0777, 6.97583)
 zoom = Vector2(4, 4)
+limit_bottom = 150
+limit_smoothed = true
 position_smoothing_enabled = true
 
-[node name="PlatFrom2" parent="." instance=ExtResource("3_43645")]
+[node name="KillZone" parent="." instance=ExtResource("5_eltco")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(-11, 131)
+shape = SubResource("WorldBoundaryShape2D_ea8qq")
+
+[node name="Coins" type="Node" parent="."]
+
+[node name="Coin" parent="Coins" instance=ExtResource("4_ieqev")]
+position = Vector2(134, 40)
+
+[node name="Coin2" parent="Coins" instance=ExtResource("4_ieqev")]
+position = Vector2(199, -24)
+
+[node name="Coin3" parent="Coins" instance=ExtResource("4_ieqev")]
+position = Vector2(230, -41)
+
+[node name="Coin4" parent="Coins" instance=ExtResource("4_ieqev")]
+position = Vector2(303, -41)
+
+[node name="Coin5" parent="Coins" instance=ExtResource("4_ieqev")]
+position = Vector2(375, -42)
+
+[node name="Coin6" parent="Coins" instance=ExtResource("4_ieqev")]
+position = Vector2(548, -42)
+
+[node name="Coin7" parent="Coins" instance=ExtResource("4_ieqev")]
+position = Vector2(760, -129)
+
+[node name="Coin8" parent="Coins" instance=ExtResource("4_ieqev")]
+position = Vector2(796, -34)
+
+[node name="Coin9" parent="Coins" instance=ExtResource("4_ieqev")]
+position = Vector2(822, -34)
+
+[node name="Coin10" parent="Coins" instance=ExtResource("4_ieqev")]
+position = Vector2(327, 41)
+
+[node name="platforms" type="Node" parent="."]
+
+[node name="PlatFrom2" parent="platforms" instance=ExtResource("3_43645")]
 position = Vector2(514, -11)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="PlatFrom2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="platforms/PlatFrom2"]
 libraries = {
 "": SubResource("AnimationLibrary_4ox5b")
 }
 autoplay = "move"
 
-[node name="PlatFrom3" parent="." instance=ExtResource("3_43645")]
+[node name="PlatFrom3" parent="platforms" instance=ExtResource("3_43645")]
 position = Vector2(865, -11)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="PlatFrom3"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="platforms/PlatFrom3"]
 libraries = {
 "": SubResource("AnimationLibrary_trngg")
 }
 autoplay = "move"
 
-[node name="PlatFrom1" parent="." instance=ExtResource("3_43645")]
+[node name="PlatFrom1" parent="platforms" instance=ExtResource("3_43645")]
 position = Vector2(-3.5036, -32)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="PlatFrom1"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="platforms/PlatFrom1"]
 libraries = {
 "": SubResource("AnimationLibrary_j6x22")
 }
