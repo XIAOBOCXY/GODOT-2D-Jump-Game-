@@ -1,11 +1,19 @@
-[gd_scene load_steps=19 format=3 uid="uid://w5jnglu7lc1c"]
+[gd_scene load_steps=25 format=3 uid="uid://w5jnglu7lc1c"]
 
 [ext_resource type="Texture2D" uid="uid://d0q2g65ahgok" path="res://assets/sprites/world_tileset.png" id="1_jgssp"]
 [ext_resource type="PackedScene" uid="uid://3nqq24jyeh0x" path="res://scenes/Player.tscn" id="1_s5p8j"]
+[ext_resource type="Script" path="res://scenes/GameManager.gd" id="1_sy47l"]
 [ext_resource type="PackedScene" uid="uid://brqwtoyy6ch0w" path="res://scenes/PlatForm.tscn" id="3_43645"]
 [ext_resource type="PackedScene" uid="uid://20hqtd875nv5" path="res://scenes/Coin.tscn" id="4_ieqev"]
 [ext_resource type="PackedScene" uid="uid://b21ajycyow0xm" path="res://scenes/KillZone.tscn" id="5_eltco"]
 [ext_resource type="PackedScene" uid="uid://dbnom0wk3pntt" path="res://scenes/Slime.tscn" id="6_1h7f8"]
+[ext_resource type="FontFile" uid="uid://dbjl1e6kdxpl6" path="res://assets/fonts/PixelOperator8.ttf" id="7_nqggi"]
+[ext_resource type="FontFile" uid="uid://c53kogtyjwsss" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="8_dbd2b"]
+[ext_resource type="PackedScene" uid="uid://ck5ihscx1a24o" path="res://scenes/Music.tscn" id="10_fm6sj"]
+
+[sub_resource type="Theme" id="Theme_75lpl"]
+default_font = ExtResource("7_nqggi")
+default_font_size = 8
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_k351x"]
 texture = ExtResource("1_jgssp")
@@ -517,7 +525,27 @@ _data = {
 "move": SubResource("Animation_rxyxq")
 }
 
+[sub_resource type="Theme" id="Theme_c8q86"]
+default_font = ExtResource("7_nqggi")
+default_font_size = 8
+
 [node name="Game" type="Node2D"]
+
+[node name="GameManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_sy47l")
+
+[node name="LabelScore" type="Label" parent="GameManager"]
+offset_left = 1032.0
+offset_top = -56.0
+offset_right = 1165.0
+offset_bottom = -48.0
+theme = SubResource("Theme_75lpl")
+theme_override_fonts/font = ExtResource("8_dbd2b")
+theme_override_font_sizes/font_size = 8
+text = "You Collect X Coins
+"
+horizontal_alignment = 1
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_uyv32")
@@ -609,3 +637,51 @@ autoplay = "RESET"
 
 [node name="Slime" parent="Slimes" instance=ExtResource("6_1h7f8")]
 position = Vector2(-119, 65)
+
+[node name="Lables" type="Node" parent="."]
+
+[node name="Label1" type="Label" parent="Lables"]
+offset_left = -320.0
+offset_top = -56.0
+offset_right = -233.0
+offset_bottom = -48.0
+theme = SubResource("Theme_75lpl")
+text = "Space - Jump
+"
+
+[node name="Label2" type="Label" parent="Lables"]
+offset_left = -320.0
+offset_top = -40.0
+offset_right = -273.0
+offset_bottom = -32.0
+theme = SubResource("Theme_c8q86")
+text = "A - Left"
+
+[node name="Label3" type="Label" parent="Lables"]
+offset_left = -320.0
+offset_top = -24.0
+offset_right = -267.0
+offset_bottom = -16.0
+theme = SubResource("Theme_75lpl")
+text = "D - Right
+"
+
+[node name="Label4" type="Label" parent="Lables"]
+offset_left = 96.0
+offset_top = -48.0
+offset_right = 149.0
+offset_bottom = -40.0
+theme = SubResource("Theme_75lpl")
+text = "Collect Coins
+"
+
+[node name="Label5" type="Label" parent="Lables"]
+offset_left = 1064.0
+offset_top = -72.0
+offset_right = 1145.0
+offset_bottom = -64.0
+theme = SubResource("Theme_75lpl")
+text = "Good Job!
+"
+
+[node name="Music" parent="." instance=ExtResource("10_fm6sj")]
