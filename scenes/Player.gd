@@ -11,11 +11,24 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var animated_sprite_2d = $AnimatedSprite2D
 
 var isdied = false
+var savepositionx = position.x
+var savepositiony = position.y
+
 func _ready():
 	pass
 	
 func changedied():
 	isdied = true	
+	position.x=savepositionx
+	position.y=savepositiony
+	print("死亡",savepositionx," ",savepositiony)
+
+func save():
+	print("save前",savepositionx," ",savepositiony)
+	isdied = false
+	savepositionx = position.x
+	savepositiony = position.y
+	print("save后",savepositionx," ",savepositiony)
 	
 func _physics_process(delta):
 	# Add the gravity.
@@ -58,3 +71,5 @@ func _physics_process(delta):
 		velocity.x = move_toward(velocity.x, 0, speed)
 
 	move_and_slide()
+
+

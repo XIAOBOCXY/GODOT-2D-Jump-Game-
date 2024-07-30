@@ -700,4 +700,4 @@ autoplay = false
 [node name="SavePoints" type="Node" parent="."]
 
 [node name="SavePoint1" parent="SavePoints" instance=ExtResource("11_ivxc0")]
-position = Vector2(-614, -318)
+position = Vector2(248, -194)
