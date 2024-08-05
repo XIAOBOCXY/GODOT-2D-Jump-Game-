@@ -10,3 +10,6 @@ func _on_body_entered(body):
 		emit_signal("InSavePoint")
 	pass # Replace with function body.
 
+
+
+
